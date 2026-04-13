@@ -17,6 +17,9 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private bool isGrounded;
     private float stepTimer;
+
+    private Note currentNote;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -37,9 +40,9 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = false;
     }
 
-    public void OnMovement(InputValue data) // esta viniendo desde el input system, y no llegara nada si es que no se llama asi el metodo 
+    public void OnMovement(InputValue data)
     {
-        movementInput = data.Get<Vector2>(); //solo porque tenemos posicion X y Z
+        movementInput = data.Get<Vector2>();
     }
 
     public void OnJump(InputValue data)
@@ -48,13 +51,12 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
     }
 
-    public void MovePlayer()
+    void MovePlayer()
     {
         bool isSprinting = sprintAction.action.IsPressed();
         Vector3 direction = transform.right * movementInput.x + transform.forward * movementInput.y;
 
         movementSpeed = isSprinting ? 7.5f : 5f;
-
         rb.linearVelocity = new Vector3(direction.x * movementSpeed, rb.linearVelocity.y, direction.z * movementSpeed);
 
         HandleFootsteps(isSprinting, direction);
@@ -81,4 +83,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+    public void SetCurrentNote(Note note)
+    {
+        currentNote = note;
+    }
+
+    
+    public void OnCollectObject()
+    {
+
+        if (currentNote != null)
+        {
+            currentNote.CollectNote();
+            currentNote = null;
+        }
+    }
 }

@@ -21,13 +21,13 @@ public class PlayerLook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        LookAround();
     }
 
     public void OnLook(InputValue data)
     {
         mouseInput = data.Get<Vector2>();
-        LookAround();
+        
     }
 
     public void LookAround()
